@@ -1,7 +1,8 @@
 ## Tarefa 1: Criar uma aplicação Web para gerar um gráfico de curva de potência.
 
 
-```Curva de potência é um gráfico que indica qual será a potência elétrica disponível
+```
+Curva de potência é um gráfico que indica qual será a potência elétrica disponível
 no aerogerador para diferentes velocidades de vento.
 ```
 
@@ -35,12 +36,9 @@ possibilitar a execução de um algoritmo. A tela deve conter:
 ```
 ● Input 1 para entrada de número inteiros e um botão para adicionar o
 número a uma lista.
-
 ● Listagem dos números adicionados.
-
 ● Input 2 para entrada de número inteiro e um botão para executar o
 algoritmo.
-
 ● Um campo para saída do resultado.
 O algoritmo: Dado um número no input 2, deve ser verificado se existem dois
 números na listagem que somados são iguais ao número informado no input 2.
