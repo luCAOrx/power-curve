@@ -23,8 +23,7 @@ Após cadastro, as curvas devem ficar disponíveis em um select. Ao selecionar u
 **Dica:** O gráfico utilizado para plotar o gráfico de curva de potência é do tipo scatter: [Highchart scatter](https://www.highcharts.com/demo/scatter)
 
 ```
-A aplicação deve ser desenvolvida em Django. Deve
-ser versionada em um repositório git público. O banco de dados utilizado deve ser
+A aplicação deve ser desenvolvida em Django e o banco de dados utilizado deve ser
 o Postgresql. Ao final, deve ser publicada no Heroku (conta gratuita).
 ```
 
