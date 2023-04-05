@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  logap-database:
+    image: ${DATABASE_CONNECTION}
+    container_name: logap-database
+    restart: always
+    ports:
+      - ${DATABASE_PORT}:${DATABASE_PORT}
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_DATABASE}
