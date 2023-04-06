@@ -1,24 +1,22 @@
-import { 
-  Column, 
-  Entity, 
-  JoinColumn, 
-  OneToMany, 
-  PrimaryGeneratedColumn 
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn
 } from "typeorm";
 
-import PowerCurveFile from './PowerCurveFile';
-
-@Entity('power_curves')
-export default class PowerCurve {
-  @PrimaryGeneratedColumn('increment')
-  id: number;
+@Entity('power-curves')
+export class PowerCurve {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   name: string;
 
-  @OneToMany(() => PowerCurveFile, file => file.powerCurve, {
-    cascade: ['insert']
-  })
-  @JoinColumn({ name: 'power_curve_id' })
-  files: PowerCurveFile[];
+  @Column()
+  file: string;
+
+  @Column()
+  created_at: Date;
 }
