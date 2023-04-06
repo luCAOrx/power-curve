@@ -1,52 +1,58 @@
-import { Request, Response } from 'express';
+import {Request, Response} from 'express';
+import {resolve} from 'node:path';
+import {promisify} from 'node:util';
+import {unlink} from 'node:fs';
 
-import { getRepository } from 'typeorm';
+import {getRepository} from 'typeorm';
 
-import PowerCurve from '../models/PowerCurve';
+import {PowerCurve} from '../models/PowerCurve';
 
-import * as yup from 'yup';
-
-export default {
+export class PowerCurveController {
   async index(request: Request, response: Response) {
-    const powerCurvesRepository = getRepository(PowerCurve);
+    try {
+      const powerCurvesRepository = getRepository(PowerCurve);
 
-    const powerCurves = await powerCurvesRepository.find();
+      const powerCurves = await powerCurvesRepository.find();
 
-    return response.json(powerCurves);
-  },
+      return response.status(200).json(powerCurves);
+    } catch (error) {
+      return response.status(400).json({error: 'Erro ao listar as curvas de potência'})
+    }
+  }
 
   async create(request: Request, response: Response) {
-    const { name } = request.body;
+    try {
+      const {name} = request.body;
 
-    const requestFile = request.files as Express.Multer.File[];
+      const {filename: file} = request.file as Express.Multer.File;
 
-    const files = requestFile.map(file => {
-      return { 
-        name: file.originalname,
-        path: file.filename,
-        size: file.size 
+      const powerCurvesRepository = getRepository(PowerCurve);
+
+      const powerCurve = powerCurvesRepository.create({name, file});
+
+      await powerCurvesRepository.save(powerCurve);
+
+      return response.status(201).json(powerCurve);
+    } catch (error) {
+      if (!request.file) {
+        return response.status(400).json({erro: 'O campo foto é obrigatório'})
       }
-    });
 
-    const powerCurvesRepository = getRepository(PowerCurve);
+      if (request.file) {
+        const {filename: file} = request.file as Express.Multer.File
 
-    const data = { name, files };
+        if (process.env.STORAGE_TYPE === 'local') {
+          promisify(unlink)(resolve(
+            __dirname, '..', '..', `uploads/${file}`
+          ))
+        } else {
+          promisify(unlink)(resolve(
+            __dirname, '..', '..', '__tests__', 'uploads', `test/${file}`
+          ))
+        }
+      }
 
-    // const schema = yup.object().shape({
-    //   name: yup.string().required().trim().min(5).max(50),
-    //   files: yup.array(yup.object().shape({
-    //     path: yup.string().required()
-    //   }))
-    // });
-
-    // await schema.validate(data, {
-    //   abortEarly: false
-    // });
-  
-    const powerCurve = powerCurvesRepository.create(data);
-  
-    await powerCurvesRepository.save(powerCurve);
-  
-    return response.status(201).json(powerCurve);
-  },
+      return response.status(400).json({erro: 'Erro ao criar curva de potência'})
+    }
+  }
 }
