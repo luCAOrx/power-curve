@@ -36,7 +36,7 @@ export default {
     }
 
     if (process.env.STORAGE_TYPE === 'test') {
-      resolve(__dirname, '..', '..', '__tests__', 'uploads', 'test')
+      resolve(__dirname, '..', '..', 'test/uploads')
     }
   },
   storage: process.env.STORAGE_TYPE === 'local' ? storageType.local : storageType.localTest,
