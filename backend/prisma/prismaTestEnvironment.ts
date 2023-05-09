@@ -9,7 +9,7 @@ import {Client} from 'pg';
 import {randomUUID} from 'node:crypto';
 import {promisify} from 'node:util';
 
-dotenv.config({path: '.env.testing'});
+dotenv.config({path: '.env'});
 
 const execSync = promisify(exec);
 
