@@ -4,12 +4,21 @@
     "module": "commonjs",
     "outDir": "./dist",
     "strict": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "baseUrl": "./",
     "strictPropertyInitialization": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@domain/*": [ "./src/domain/*" ],
+      "@infra/*": [ "./src/infra/*" ],
+      "@test/*": [ "./test/*" ]
+    }
   },
   "exclude": [
+    ".spec.ts$",
     ".e2e-spec.ts$",
     "jest-e2e.ts"
   ]
