@@ -20,13 +20,21 @@ describe('Create Power Curve Controller', () => {
       __dirname, '..', '..', '..', '..', `test/uploads/${file}`
     )
 
-    const justTheTestFilePathFile = testFilePath.split('/').slice(9).join('')
-
     expect(statusCode).toStrictEqual(201)
     expect(body).toStrictEqual(powerCurve)
-    expect(justTheTestFilePathFile).toStrictEqual(file)
 
     unlinkSync(testFilePath)
+  })
+
+  it('should not be able to create a power curve with a exist name', async () => {
+    const {body, statusCode} = await new MakePowerCurve().toHTTP({})
+
+    expect(statusCode).toStrictEqual(400)
+    expect(body).toStrictEqual({
+      statusCode: 400,
+      message: 'Power curve already exists',
+      error: 'Bad request'
+    })
   })
 
   it('should not be able to create a power curve without a name', async () => {
@@ -35,7 +43,11 @@ describe('Create Power Curve Controller', () => {
     })
 
     expect(statusCode).toStrictEqual(400)
-    expect(body).toStrictEqual({error: 'The field name should not be empty'})
+    expect(body).toStrictEqual({
+      statusCode: 400,
+      message: 'The field name should not be empty',
+      error: 'Bad request'
+    })
 
   })
 
@@ -45,7 +57,11 @@ describe('Create Power Curve Controller', () => {
     })
 
     expect(statusCode).toStrictEqual(400)
-    expect(body).toStrictEqual({error: 'The field name must be less than 255 characters'})
+    expect(body).toStrictEqual({
+      statusCode: 400,
+      message: 'The field name must be less than 255 characters',
+      error: 'Bad request'
+    })
   })
 
   it('should not be able to create power curve if name is less than 5 characters', async () => {
@@ -54,7 +70,11 @@ describe('Create Power Curve Controller', () => {
     })
 
     expect(statusCode).toStrictEqual(400)
-    expect(body).toStrictEqual({error: 'The field name must be than 5 characters'})
+    expect(body).toStrictEqual({
+      statusCode: 400,
+      message: 'The field name must be than 5 characters',
+      error: 'Bad request'
+    })
   })
 
   it('should not be able to create a power curve without a file', async () => {
@@ -64,7 +84,11 @@ describe('Create Power Curve Controller', () => {
     })
 
     expect(statusCode).toStrictEqual(400)
-    expect(body).toStrictEqual({error: 'The field file should not be empty'})
+    expect(body).toStrictEqual({
+      statusCode: 400,
+      message: 'The field file should not be empty',
+      error: 'Bad request'
+    })
   })
 
   it('should not be able to create a power curve if the filename is longer than 200 characters', async () => {
@@ -78,7 +102,11 @@ describe('Create Power Curve Controller', () => {
     })
 
     expect(statusCode).toStrictEqual(400)
-    expect(body).toStrictEqual({error: 'The field file must be less than 200 characters'})
+    expect(body).toStrictEqual({
+      statusCode: 400,
+      message: 'The field file must be less than 200 characters',
+      error: 'Bad request'
+    })
 
   })
 
@@ -93,6 +121,10 @@ describe('Create Power Curve Controller', () => {
     })
 
     expect(statusCode).toStrictEqual(400)
-    expect(body).toStrictEqual({error: 'The file field must be more than 25 characters'})
+    expect(body).toStrictEqual({
+      statusCode: 400,
+      message: 'The file field must be more than 25 characters',
+      error: 'Bad request'
+    })
   })
 })
