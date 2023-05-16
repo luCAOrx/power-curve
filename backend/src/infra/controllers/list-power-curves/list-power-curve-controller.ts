@@ -3,10 +3,19 @@ import {resolve} from 'node:path'
 import {readFileSync} from 'node:fs'
 import {ListPowerCurvesUseCase} from "@domain/use-case/list-power-curves-use-case";
 import {PrismaPowerCurveRepository} from "@infra/repositories/prisma/prisma-power-curve-repository";
+import {QueryParamsShouldNotBeEmpty} from "@infra/errors/query-params-should-not-be-empty";
 
 export class ListPowerCurvesController {
   async handle(request: Request, response: Response) {
     const {page, takePage} = request.query
+
+    if (!page || !takePage) {
+      return response.status(400).json({
+        statusCode: 400,
+        message: new QueryParamsShouldNotBeEmpty().message,
+        error: 'Bad request'
+      })
+    }
 
     const prismaPowerCurveRepository = new PrismaPowerCurveRepository()
 
@@ -30,13 +39,11 @@ export class ListPowerCurvesController {
           const localFilePath = resolve(__dirname, '..', '..', '..', '..', `uploads/${file}`)
           const localFileData = readFileSync(localFilePath)
 
-          if (file === localFilePath) {
-            return {
-              id,
-              name,
-              file: localFileData,
-              created_at
-            }
+          return {
+            id,
+            name,
+            file: localFileData,
+            created_at
           }
         }
 
@@ -44,21 +51,21 @@ export class ListPowerCurvesController {
           const testFilePath = resolve(__dirname, '..', '..', '..', '..', `test/uploads/${file}`)
           const testFileData = readFileSync(testFilePath)
 
-          if (file === testFilePath) {
-            return {
-              id,
-              name,
-              file: testFileData,
-              created_at
-            }
+          return {
+            id,
+            name,
+            file: testFileData,
+            created_at
           }
         }
       })
 
       return response.status(200).json(powerCurveOrPowerCurves)
-    }).catch((error: Error) => {
+    }).catch(() => {
       return response.status(400).json({
-        error: error.message
+        statusCode: 400,
+        message: 'Error listing power curve',
+        error: 'Bad request'
       })
     })
   }
