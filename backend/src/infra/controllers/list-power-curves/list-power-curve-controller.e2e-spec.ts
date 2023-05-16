@@ -1,8 +1,10 @@
+import {app} from "@infra/app"
 import {MakePowerCurve} from "@test/factories/make-power-curve-factory"
 import {MakePowerCurveList} from "@test/factories/make-power-curve-list-factory"
 import {makeArrayWithFivePowerCurvesObjects} from "@test/utils/make-array-with-five-power-curves-objects"
 import {readdirSync, unlinkSync} from "node:fs"
 import {resolve} from "node:path"
+import request from 'supertest'
 
 var testUploadsDirectory = ['']
 
@@ -34,6 +36,17 @@ describe('List Power Curves Controller', () => {
       expect(statusCode).toStrictEqual(200)
       expect(body).toHaveLength(5)
       expect(body).toStrictEqual(powerCurveOrPowerCurves)
+    })
+  })
+
+  it('should not be able to list power curves without required query params', async () => {
+    const {body, statusCode} = await request(app).get('/power_curve/list')
+
+    expect(statusCode).toStrictEqual(400)
+    expect(body).toStrictEqual({
+      statusCode: 400,
+      message: 'The query params should not be empty',
+      error: 'Bad request'
     })
   })
 
