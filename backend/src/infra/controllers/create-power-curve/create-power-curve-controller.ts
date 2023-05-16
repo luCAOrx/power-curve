@@ -3,6 +3,13 @@ import {Request, Response} from "express";
 import {unlinkSync} from "node:fs";
 import {PrismaPowerCurveRepository} from "@infra/repositories/prisma/prisma-power-curve-repository";
 import {CreatePowerCurveUseCase} from "@domain/use-case/create-power-curve-use-case";
+import {NameShouldNotBeEmpty} from "@domain/entities/errors/name-should-not-be-empty";
+import {NameMustBeLessThan255Characters} from "@domain/entities/errors/name-must-be-less-than-255-characters";
+import {NameMustBeThan5Characters} from "@domain/entities/errors/name-must-be-than-5-characters";
+import {PowerCurveAlreadyExists} from "@domain/use-case/errors/power-curve-already-exists";
+import {FileShouldNotBeEmpty} from "@domain/entities/errors/file-should-not-be-empty";
+import {FileMustBeLessThan200Characters} from "@domain/entities/errors/file-must-be-less-than-200-characters";
+import {FileMustBeMoreThan25Characters} from "@domain/entities/errors/file-must-be-more-than-25-characters";
 
 export class CreatePowerCurveController {
   async handle(request: Request, response: Response) {
@@ -38,7 +45,61 @@ export class CreatePowerCurveController {
         process.env.STORAGE_TYPE === 'local' ? unlinkSync(localFilePath) : unlinkSync(testFilePath)
       }
 
-      return response.status(400).json({error: error.message})
+      if (error instanceof NameShouldNotBeEmpty) {
+        return response.status(400).json({
+          statusCode: 400,
+          message: new NameShouldNotBeEmpty().message,
+          error: 'Bad request'
+        })
+      }
+
+      if (error instanceof NameMustBeLessThan255Characters) {
+        return response.status(400).json({
+          statusCode: 400,
+          message: new NameMustBeLessThan255Characters().message,
+          error: 'Bad request'
+        })
+      }
+
+      if (error instanceof NameMustBeThan5Characters) {
+        return response.status(400).json({
+          statusCode: 400,
+          message: new NameMustBeThan5Characters().message,
+          error: 'Bad request'
+        })
+      }
+
+      if (error instanceof PowerCurveAlreadyExists) {
+        return response.status(400).json({
+          statusCode: 400,
+          message: new PowerCurveAlreadyExists().message,
+          error: 'Bad request'
+        })
+      }
+
+      if (error instanceof FileShouldNotBeEmpty) {
+        return response.status(400).json({
+          statusCode: 400,
+          message: new FileShouldNotBeEmpty().message,
+          error: 'Bad request'
+        })
+      }
+
+      if (error instanceof FileMustBeLessThan200Characters) {
+        return response.status(400).json({
+          statusCode: 400,
+          message: new FileMustBeLessThan200Characters().message,
+          error: 'Bad request'
+        })
+      }
+
+      if (error instanceof FileMustBeMoreThan25Characters) {
+        return response.status(400).json({
+          statusCode: 400,
+          message: new FileMustBeMoreThan25Characters().message,
+          error: 'Bad request'
+        })
+      }
     })
   }
 }
