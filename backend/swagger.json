@@ -1,0 +1,237 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Curva de Potência",
+    "description": "API responsável por gerenciar curva de potência",
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "Curva de potência",
+      "description": "Rotas relacionadas a curva de potência"
+    }
+  ],
+  "paths": {
+    "/power_curve/create": {
+      "post": {
+        "tags": [ "Curva de potência" ],
+        "summary": "Criação de uma curva de potência",
+        "parameters": [ {
+            "name": "name",
+            "in": "formData",
+            "type": "string",
+            "required": true,
+            "description": "Nome para uma curva de potência"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "type": "file",
+            "required": true,
+            "description": "Arquivo .csv da curva de potência"
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "type": "object",
+              "format": "application/json",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "file": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "id": "ad8a2962-b73f-4203-9cf5-c46e8535f7fd",
+                "name": "curva-de-potência-04-2017",
+                "file": "02f0ccbbb98d-example-Abr-2017-curva-potencia-windbox.csv",
+                "created_at": "2023-05-12T02: 00: 12.045Z"
+              }
+            },
+            "description": "Sucesso ao criar curva de potência"
+          },
+          "400": {
+            "schema": {
+              "type": "object",
+              "format": "application/json",
+              "properties": {
+                "statusCode": {
+                  "type": "number"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "error": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "statusCode": 400,
+                "message": "The field name should not be empty",
+                "error": "Bad request"
+              }
+            },
+            "description": "Erro ao criar curva de potência"
+          },
+          "500": {
+            "schema": {
+              "type": "object",
+              "format": "application/json",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              },
+              "example": {
+                "message": "Internal server error."
+              }
+            },
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/power_curve/list": {
+      "get": {
+        "tags": [ "Curva de potência" ],
+        "summary": "Listagem de uma curva de potência ou mais",
+        "parameters": [ {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "type": "number"
+          }, {
+            "name": "takePage",
+            "in": "query",
+            "required": true,
+            "type": "number"
+          } ],
+        "responses": {
+          "200": {
+            "schema": {
+              "type": "array",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "file": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "array"
+                    }
+                  }
+                },
+                "created_at": {
+                  "type": "string"
+                }
+              },
+              "items": {
+                "$ref": "#/definitions/PowerCurveList"
+              }
+            },
+            "description": "Lista uma curva de potência ou 5"
+          },
+          "400": {
+            "schema": {
+              "type": "object",
+              "format": "application/json",
+              "example": {
+                "statusCode": 400,
+                "message": "Error listing power curve",
+                "error": "Bad request"
+              }
+            },
+            "description": "Erro ao listar curva de potência"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "PowerCurve": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "file": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        }
+      },
+      "example": {
+        "id": "ad8a2962-b73f-4203-9cf5-c46e8535f7fd",
+        "name": "curva-de-potência-04-2017",
+        "file": "02f0ccbbb98d-example-Abr-2017-curva-potencia-windbox.csv",
+        "created_at": "2023-05-12T02: 00: 12.045Z"
+      }
+    },
+    "PowerCurveList": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "file": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "data": {
+              "type": "array"
+            }
+          }
+        },
+        "created_at": {
+          "type": "string"
+        }
+
+      },
+      "example": {
+        "id": "e55eaf51-c899-46bc-88ba-dd1458feb891",
+        "name": "curva de potência 2",
+        "file": {
+          "type": "Buffer",
+          "data": [
+            239,
+            187,
+            191,
+            86,
+            101,
+            108,
+            111,
+            99,
+            105
+          ],
+          "created_at": "2023-05-14T02:13:17.327Z"
+
+        }
+      }
+    }
+  }
+}
+
+
