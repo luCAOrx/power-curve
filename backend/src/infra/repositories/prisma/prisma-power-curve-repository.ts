@@ -37,7 +37,7 @@ export class PrismaPowerCurveRepository implements PowerCurveRepository {
 
   async findMany(page: number, takePage: number): Promise<PowerCurve[]> {
     const powerCurves = await prismaClient.powerCurve.findMany({
-      orderBy: {id: 'desc'},
+      orderBy: {created_at: 'desc'},
       take: takePage,
       skip: (page - 1) * takePage
     })
