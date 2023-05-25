@@ -16,14 +16,5 @@
       "@infra/*": [ "./src/infra/*" ],
       "@test/*": [ "./test/*" ]
     }
-  },
-  "exclude": [
-    "./src/**/*.spec.ts",
-    "./src/**/*.e2e-spec.ts",
-    "./jest.config.ts",
-    "./swagger.json",
-    "./node_modules",
-    "./test",
-    "./prisma/prismaTestEnvironment.ts"
-  ]
+  }
 }
