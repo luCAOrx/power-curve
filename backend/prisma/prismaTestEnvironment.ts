@@ -1,21 +1,22 @@
+import * as dotenv from "dotenv";
+import NodeEnvironment from "jest-environment-node";
+import { exec } from "node:child_process";
+import { randomUUID } from "node:crypto";
+import { promisify } from "node:util";
+import { Client } from "pg";
+
 import type {
   JestEnvironmentConfig,
   EnvironmentContext,
-} from '@jest/environment';
-import {exec} from 'node:child_process';
-import * as dotenv from 'dotenv';
-import NodeEnvironment from 'jest-environment-node';
-import {Client} from 'pg';
-import {randomUUID} from 'node:crypto';
-import {promisify} from 'node:util';
+} from "@jest/environment";
 
-dotenv.config({path: '.env'});
+dotenv.config({ path: ".env" });
 
 const execSync = promisify(exec);
 
 export default class PrismaTestEnvironment extends NodeEnvironment {
-  private schema: string;
-  private connectionString: string;
+  private readonly schema: string;
+  private readonly connectionString: string;
 
   constructor(config: JestEnvironmentConfig, _context: EnvironmentContext) {
     super(config, _context);
@@ -27,19 +28,23 @@ export default class PrismaTestEnvironment extends NodeEnvironment {
     const dbName = process.env.DATABASE_NAME;
 
     this.schema = `test_${randomUUID()}`;
-    this.connectionString = `postgresql://${dbUser}:${dbPass}@${dbHost}:${dbPort}/${dbName}?schema=${this.schema}`;
+    this.connectionString = `postgresql://${String(dbUser)}:${String(
+      dbPass
+    )}@${String(dbHost)}:${String(dbPort)}/${String(dbName)}?schema=${
+      this.schema
+    }`;
   }
 
-  async setup() {
+  async setup(): Promise<void> {
     process.env.DATABASE_URL = this.connectionString;
     this.global.process.env.DATABASE_URL = this.connectionString;
 
-    await execSync('yarn prisma migrate dev');
+    await execSync("yarn prisma migrate dev");
 
-    return super.setup();
+    await super.setup();
   }
 
-  async teardown() {
+  async teardown(): Promise<void> {
     const client = new Client({
       connectionString: this.connectionString,
     });

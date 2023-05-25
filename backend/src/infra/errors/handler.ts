@@ -1,7 +1,6 @@
-import {ErrorRequestHandler, Request, Response} from 'express';
+import { type Request, type Response } from "express";
 
-const errorHandler: ErrorRequestHandler = (error, request, response, next) => {
-  return response.status(500).json({message: 'Internal server error.'});
-};
+const errorHandler = (request: Request, response: Response): Response<any> =>
+  response.status(500).json({ message: "Internal server error." });
 
 export default errorHandler;

@@ -1,26 +1,31 @@
-import {PowerCurve} from "../entities/power-curve";
-import {PowerCurveRepository} from "../repositories/power-curve-repository";
-import {PowerCurveAlreadyExists} from "./errors/power-curve-already-exists";
+import { PowerCurve } from "../entities/power-curve";
+import { type PowerCurveRepository } from "../repositories/power-curve-repository";
+import { PowerCurveAlreadyExists } from "./errors/power-curve-already-exists";
 
-type CreatePowerCurveUseCaseRequest = {
+interface CreatePowerCurveUseCaseRequest {
   name: string;
   file: string;
 }
 
-type CreatePowerCurveUseCaseResponse = PowerCurve
+type CreatePowerCurveUseCaseResponse = PowerCurve;
 
 export class CreatePowerCurveUseCase {
-  constructor(private powerCurveRepository: PowerCurveRepository) {}
+  constructor(private readonly powerCurveRepository: PowerCurveRepository) {}
 
-  async execute({name, file}: CreatePowerCurveUseCaseRequest): Promise<CreatePowerCurveUseCaseResponse> {
-    const powerCurve = PowerCurve.create({name, file})
+  async execute({
+    name,
+    file,
+  }: CreatePowerCurveUseCaseRequest): Promise<CreatePowerCurveUseCaseResponse> {
+    const powerCurve = PowerCurve.create({ name, file });
 
-    const powerCurveNameAlreadyExists = await this.powerCurveRepository.exists(powerCurve.props.name)
+    const powerCurveNameAlreadyExists = await this.powerCurveRepository.exists(
+      powerCurve.props.name
+    );
 
-    if (powerCurveNameAlreadyExists) throw new PowerCurveAlreadyExists()
+    if (powerCurveNameAlreadyExists) throw new PowerCurveAlreadyExists();
 
-    await this.powerCurveRepository.create(powerCurve)
+    await this.powerCurveRepository.create(powerCurve);
 
-    return powerCurve
+    return powerCurve;
   }
 }

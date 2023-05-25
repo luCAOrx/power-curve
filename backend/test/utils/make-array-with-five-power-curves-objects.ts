@@ -1,5 +1,9 @@
-import {Response} from "supertest"
+import { type Response } from "supertest";
 
-export function makeArrayWithFivePowerCurvesObjects({responseBody}: {responseBody: Response}) {
-  return [responseBody]
+export function makeArrayWithFivePowerCurvesObjects({
+  responseBody,
+}: {
+  responseBody: Response;
+}): Response[] {
+  return [responseBody];
 }
