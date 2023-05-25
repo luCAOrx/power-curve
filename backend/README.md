@@ -165,7 +165,7 @@ Para visualizar as requisições da api instale o cliente de requisições HTTP 
 
 [Insomnia](https://insomnia.rest/download)
 
-Depois é só importar o arquivo [Power Curve](insomnia-power-curve.json) para o Insomnia.
+Depois é só importar o arquivo [Power Curve](../.github/insomnia-power-curve.json) para o Insomnia.
 
 ## Licença
 Esse projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE.md) para mais detalhes.
